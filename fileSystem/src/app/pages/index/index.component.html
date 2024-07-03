@@ -1,0 +1,129 @@
+
+<section class="pt-4 mt-5">
+  <div class="container-fluid">
+      <div class="row m-0">
+  
+        <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12" *ngIf="loginOrNot()">
+          <div class="dashboard-navbar overlio-top">
+  
+  
+            <div class="d-navigation">
+              <ul id="metismenu">
+                <li class="active"><a routerLink="/home"><i class="ti-dashboard"></i>Dashboard</a></li>
+                <li><a routerLink="/files"><i class="ti-folder"></i>Files</a></li>
+                <li><a routerLink="/filesArchiver"><i class="fa fa-archive" aria-hidden="true"></i>
+                  Files Archive</a></li>
+                 <li ><a routerLink="/employeur"><i class="fa fa-user" aria-hidden="true"></i>
+                  Employeur</a></li>
+                 <li ><a routerLink="/autorisation"><i class="fa fa-check-square-o" aria-hidden="true"></i>
+                  Autorisation</a></li>
+  
+                  <li><a routerLink="/chat"><i class="ti-email"></i>Messages</a></li>
+  
+                <li><a (click)="logout()"><i class="ti-power-off"></i>Log Out</a></li>
+              </ul>
+            </div>
+  
+          </div>
+        </div>
+  
+        <div class="col-xl-10 col-lg-6 col-md-6 col-sm-12" >
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <!-- Breadcrumbs -->
+              <div class="bredcrumb_wrap">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                  </ol>
+                </nav>	
+              </div>
+            </div>
+          </div>
+         
+              <div class="row">
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 shadow c">
+                  <div class="dashboard-stat">
+                    <div class="dashboard-stat-icon widget-1"><i class="fa fa-users"></i></div>
+                    <div class="dashboard-stat-content"><h4>{{userNumber}}</h4> <p> All Employeur </p></div>
+                  </div>	
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 shadow c">
+                  <div class="dashboard-stat">
+                    <div class="dashboard-stat-icon widget-4"><i class="fa fa-users"></i></div>
+                    <div class="dashboard-stat-content"><h4> {{inActiveUser}}</h4> <p>Blocked Employeur</p></div>
+                  </div>	
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 shadow c">
+                  <div class="dashboard-stat">
+                    <div class="dashboard-stat-icon widget-1"><i class="fa fa-users"></i></div>
+                    <div class="dashboard-stat-content"><h4>{{activeUser}}</h4> <p>Active Employeur </p></div>
+                  </div>	
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 shadow c">
+                  <div class="dashboard-stat">
+                    <div class="dashboard-stat-icon widget-3"><i class="fa fa-file"></i></div>
+                    <div class="dashboard-stat-content"><h4> {{fileActive}}</h4> <p>Files Uploded</p></div>
+                  </div>	
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 shadow c">
+                  <div class="dashboard-stat">
+                    <div class="dashboard-stat-icon widget-3"><i class="fa fa-file"></i></div>
+                    <div class="dashboard-stat-content"><h4> {{fileArchive}}</h4> <p>Files Archived</p></div>
+                  </div>	
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 shadow c">
+                  <div class="dashboard-stat">
+                    <div class="dashboard-stat-icon widget-3"><i class="fa fa-file"></i></div>
+                    <div class="dashboard-stat-content"><h4> {{fileArchive+fileActive}}</h4> <p>All Files</p></div>
+                  </div>	
+                </div>
+               
+                
+              
+                
+            
+              </div>
+        
+       
+            
+          <div class="row">
+            <div class="col-lg-6 col-md-12">
+              <div class="dashboard-gravity-list with-icons">
+                <h4>Last File Uploded </h4>
+                <ul *ngFor="let f of listFichier">
+                  <li>
+                    <i class="dash-icon-box ti-layers text-purple bg-light-purple"></i> File <strong>
+                      <a href="#">{{f.name}}</a></strong> Uploded By {{f.utilisateurs.nom+" "+f.utilisateurs.prenom}}
+                    In {{f.dateUploaded | date:"dd-MM-YYYY , hh:mm"}}
+                  </li> 
+                </ul>
+              </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-12">
+              <div class="dashboard-gravity-list invoices with-icons">
+                <h4>Charts </h4>
+                <canvas  id="doubleSinusoidalChart" width="400" height="400"></canvas>
+ 
+               </div>
+            </div>
+            
+            
+          </div>	
+        </div>
+  
+  
+      </div>
+    </div>
+  </section>
+  <script>
+    var ctx = document.getElementById('fileUploadChart').getContext('2d');
+    var chart = new Chart(ctx, {
+      type: 'bar',  
+      data: chartData,
+      options: {
+       }
+    });
+    </script>

@@ -1,0 +1,72 @@
+<section class="pt-4 mt-5">
+  <div class="container-fluid">
+    <div class="row m-0">
+
+      <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12" *ngIf="loginOrNot()">
+        <div class="dashboard-navbar overlio-top">
+
+
+          <div class="d-navigation">
+            <ul id="metismenu">
+              <li class="active"><a routerLink="/home"><i class="ti-dashboard"></i>Dashboard</a></li>
+              <li><a routerLink="/files"><i class="ti-folder"></i>Files</a></li>
+              <li><a routerLink="/filesArchiver"><i class="fa fa-archive" aria-hidden="true"></i>
+                Files Archive</a></li>
+              <li ><a routerLink="/employeur"><i class="fa fa-user" aria-hidden="true"></i>
+                Employeur</a></li>
+              <li ><a routerLink="/autorisation"><i class="fa fa-check-square-o" aria-hidden="true"></i>
+                Autorisation</a>
+              </li>
+
+              <li><a routerLink="/chat"><i class="ti-email"></i>Messages</a></li>
+
+              <li><a (click)="logout()"><i class="ti-power-off"></i>Log Out</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-xl-10 col-lg-6 col-md-6 col-sm-12" >
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <!-- Breadcrumbs -->
+            <div class="bredcrumb_wrap">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Autorisation</li>
+                </ol>
+              </nav>	
+            </div>
+          </div>
+        </div>
+        <h4>Autorisation </h4>
+       
+        <div class="row">
+          <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12" *ngFor="let username of groupedAutorisations | keyvalue">
+            <div class="card" >
+              <div class="card-header">
+                {{ username.key }} 
+                            
+              </div>
+              <div class="card-body" *ngFor="let autorisation of username.value">
+               {{ autorisation.fichier.name }} - {{ autorisation.permission }} 
+              
+              <button mat-stroked-button style="margin-left:5px;" (click)="deleteAutorisation(autorisation.id)">
+                <mat-icon color="accent" >delete</mat-icon>
+              </button>
+               </div>
+              
+              
+            </div>
+          </div>
+        </div>
+       
+      </div>
+
+
+    </div>
+  </div>
+
+</section>

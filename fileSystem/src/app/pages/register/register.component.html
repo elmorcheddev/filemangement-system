@@ -1,0 +1,102 @@
+<div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+    <div class="modal-content" id="registermodal">
+        <div class="modal-header">
+            <h4>Sign In</h4>
+        </div>
+        <div class="modal-body">
+            <p style="color: red;">{{message}}</p>
+            <div class="login-form">
+                <form #form="ngForm" (ngSubmit)="register(form)">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Photo</label>
+                                <input type="file" name="image" class="form-control" (change)="fileSelected($event)">
+                                
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label>Nom</label>
+                                <input type="text" class="form-control" [(ngModel)]="utilisateur.nom" name="nom"
+                                  placeholder="Nom" required  >
+                                <div class="error"
+                                    *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)">
+                                    Nom Est Obligatoir et doit etr min 3 caracte
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label>Prenom</label>
+                                <input type="text" class="form-control" [(ngModel)]="utilisateur.prenom" name="prenom"
+                                    placeholder="Prenom" required minlength="3">
+                                <div class="error"
+                                    *ngIf="form.controls['prenom']?.invalid && (form.controls['prenom']?.dirty || form.controls['prenom']?.touched)">
+                                    <div *ngIf="form.controls['prenom']?.errors">Last Name is required.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label>Adress</label>
+                                <input type="text" class="form-control" [(ngModel)]="utilisateur.adresse" name="adresse"
+                                    placeholder="Adresse" required minlength="5">
+                                <div class="error"
+                                    *ngIf="form.controls['adresse']?.invalid && (form.controls['adresse']?.dirty || form.controls['adresse']?.touched)">
+                                    <div *ngIf="form.controls['adresse']?.errors">Address is required.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label>CIN</label>
+                                <input type="text" class="form-control" [(ngModel)]="utilisateur.cin" name="cin"
+                                    placeholder="CIN" required pattern="[0-9]{8}" maxlength="8" minlength="8">
+                                <div class="error"
+                                    *ngIf="form.controls['cin']?.invalid && (form.controls['cin']?.dirty || form.controls['cin']?.touched)">
+                                    <div *ngIf="form.controls['cin']?.errors">CIN is required.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label>E-mail</label>
+                                <input type="text" class="form-control" [(ngModel)]="utilisateur.username"
+                                    name="username" placeholder="Username" required minlength="5" email >
+                                <div class="error"
+                                    *ngIf="form.controls['username']?.invalid && (form.controls['username']?.dirty || form.controls['username']?.touched)">
+                                    <div *ngIf="form.controls['username']?.errors">Username is required.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+
+                                <label>Password</label>
+                                <input type="password" class="form-control" [(ngModel)]="utilisateur.password"
+                                    name="password" placeholder="Username" required minlength="8">
+                                <div class="error"
+                                    *ngIf="form.controls['password']?.invalid && (form.controls['password']?.dirty || form.controls['password']?.touched)">
+                                    <div *ngIf="form.controls['password']?.errors">Username is required.</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <button type="submit" [disabled]="form.invalid" class="btn dark-2 btn-md full-width pop-login">Register</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+         <div class="modal-footer">
+            <div class="mf-link"><i class="ti-user"></i>Have An Account?<a routerLink="/login" class="theme-cl"> Log
+                    in</a></div>
+        </div>
+    </div>
+ 

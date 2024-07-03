@@ -1,0 +1,34 @@
+<div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+    <div class="modal-content" id="registermodal">
+        <div class="modal-header">
+            <h4>Sign In</h4>
+         </div>
+        <div class="modal-body">
+            <p style="color: red;">{{message}}</p>
+            <div class="login-form">
+                <form  #form="ngForm" (ngSubmit)=" login(form)">
+                
+                    <div class="form-group">
+                        <label>User Name</label>
+                        <input type="text" class="form-control" ngModel name="username" placeholder="Username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" ngModel name="password" class="form-control" placeholder="*******">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn dark-2 btn-md full-width pop-login">Login</button>
+                    </div>
+                
+                </form>
+            </div>
+            
+            
+        </div>
+        <div class="modal-footer">
+            <div class="mf-link"><i class="ti-user"></i>Haven't An Account?<a routerLink="/register" class="theme-cl"> Sign Up</a></div>
+         </div>
+    </div>
+</div>

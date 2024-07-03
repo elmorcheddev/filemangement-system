@@ -1,0 +1,498 @@
+<section class="pt-4 mt-5">
+  <div class="container-fluid">
+    <div class="row m-0">
+
+      <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12" *ngIf="loginOrNot()">
+        <div class="dashboard-navbar overlio-top">
+
+
+          <div class="d-navigation">
+            <ul id="metismenu">
+              <li class="active"><a routerLink="/home"><i class="ti-dashboard"></i>Dashboard</a></li>
+              <li><a routerLink="/files"><i class="ti-folder"></i>Files</a></li>
+              <li><a routerLink="/filesArchiver"><i class="fa fa-archive" aria-hidden="true"></i>
+                Files Archive</a></li>
+               <li  ><a routerLink="/employeur"><i class="fa fa-user" aria-hidden="true"></i>
+                Employeur</a></li>
+               <li  ><a routerLink="/autorisation"><i class="fa fa-check-square-o" aria-hidden="true"></i>
+                Autorisation</a></li>
+
+              <li><a routerLink="/chat"><i class="ti-email"></i>Messages</a></li>
+
+              <li><a (click)="logout()"><i class="ti-power-off"></i>Log Out</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-xl-10 col-lg-6 col-md-6 col-sm-12" *ngIf="loginOrNot">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <!-- Breadcrumbs -->
+            <div class="bredcrumb_wrap">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Files </li>
+                </ol>
+              </nav>	
+            </div>
+          </div>
+        </div>
+        <div class="_dashboard_content">
+          <div class="_dashboard_content_header">
+            <div class="col-xl-12 col-lg-12">
+              <div class="form-group">
+                <div class="label_flex">
+                  <label class="fl_01">Files </label>
+                  <div class="custom-file mb-3" *ngIf="id">
+
+                    <button data-toggle="modal" data-target="#files"   class="btn dark-3 full-width r-radius"><i class="fa fa-plus"></i>
+                      
+                      File</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+         
+              <div class="row">
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+                  <div class="d-navigation ">
+                    <ul>
+                      <li>
+                        <div class="row mb-3">
+                          <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12">
+                            <a  *ngIf="!cat.id" (click)="displayForm()">
+                              <i class="fa fa-plus"></i> Dossier</a>
+                              <a  *ngIf="cat.id" (click)="displayForm()">
+                                <i class="fa fa-edit"></i> Dossier</a>
+                          </div>
+                          
+                          <form *ngIf="active==true" #form="ngForm" (ngSubmit)="addNewDossier(form)">
+                            <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12" *ngIf="!id">
+                              <div class="form-group with-light">
+                                <div class="tg_grouping">
+                                   <input type="text" [(ngModel)]="cat.nomCat" name="nomCat" class="form-control mb-3" placeholder="nom dossier">
+                                    
+                                    <button type="submit" mat-stroked-button color="accent" *ngIf="!cat.id">
+                                      Add</button>
+                                  </div>
+
+                               </div>
+                            </div>
+                            <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12" *ngIf="id">
+                              <div class="form-group with-light">
+                                <div class="tg_grouping">
+                                   <input type="text" [(ngModel)]="cat.nomCat" name="nomCat" class="form-control mb-3" placeholder="nom dossier">
+                                   <button type="submit" mat-stroked-button color="accent" *ngIf="cat.id">
+                                    Edit</button>
+                                    
+                                  </div>
+
+                               </div>
+                            </div>   
+                            
+                          </form>
+                        </div>
+                      </li>
+                      <li><a (click)="goToAllFiles()"> 
+                        <i class="fa fa-folder" aria-hidden="true"></i>All Files</a></li>
+                      <li *ngFor="let cat of folders">
+                          <div class="row">
+                            <div class="col-9">
+                              <a (click)="view(cat.id)">
+                                <i class="fa fa-folder" aria-hidden="true"></i><span style="font-size: 1x;">{{cat.nomCat}}</span></a>
+                            </div>
+                            <div class="col-3">
+                              <a   data-toggle="tooltip" data-placement="top" title="Edit job"  (click)="removeDossier(cat.id)" 
+                              class="_edit_list_point">   
+                                <i class="fa fa-remove"></i> </a>
+                            </div>
+                          </div>
+                        
+ 
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-xl-9 col-lg-6 col-md-6 col-sm-12" *ngIf="id">
+                  <div class="table text-nowrap">
+                    <table class="table-responsive">
+                      <thead>
+                        <tr>
+                          <th>FILE NAME(SIZE)</th>
+                          <th>ACTION </th>
+                          <th>UPLOADED DATE</th>
+                          <th>RESTORED DATE</th>
+
+                          <th>UPLOADED BY</th>
+                          <th *ngIf="nomRoles=='ADMIN'">Access</th>
+                         </tr>
+                      </thead>
+                      <tbody class="table-border-bottom-0">
+                        <tr *ngFor="let file of listFile ">
+                          <td><a href="#">{{file.name}}</a>({{bytesToMO(file.sizeFile)}} Mo)<br>
+                          <td>
+                            <ul class="_action_grouping_list" *ngFor="let p of listAuto">
+                              
+                             
+                              <a *ngIf="p.fichier.id == file.id && utilisateur.id==p.utilisateurs.id && p.permission === 'READ'" (click)="downloadFile(file.id,file.name,file.contentType)" data-toggle="tooltip" data-placement="top"
+                              mat-stroked-button  class="_edit_list_point" (click)="downloadFile(file.id , file.name,file.contentType)"><i class="fa fa-download"></i> Download</a>
+                                <a *ngIf="p.fichier.id == file.id && utilisateur.id==p.utilisateurs.id && p.permission === 'ARCHIVE'" (click)="archiver(file.id)" data-toggle="tooltip" data-placement="top"
+                                mat-stroked-button   class="_lock_point"><i class="fa fa-lock"></i> Archive</a>
+                                <a *ngIf="p.fichier.id == file.id && utilisateur.id==p.utilisateurs.id && p.permission === 'DELETE'" (click)="archiver(file.id)" data-toggle="tooltip" data-placement="top"
+                                mat-stroked-button class="_delete_point"><i class="fa fa-trash"></i> Delete</a>
+                                  <a *ngIf="p.fichier.id == file.id && utilisateur.id==p.utilisateurs.id && p.permission === 'WRITE'" (click)="archiver(file.id)" data-toggle="tooltip" data-placement="top"
+                                   class="_delete_point"><i class="fa fa-refresh"></i> Edit</a>
+                           
+                            
+                            </ul>
+                          </td> 
+                          
+                          <td>
+                            {{file.dateUploaded | date:"dd-MM-YYYY , hh:mm"}}
+                          </td>
+                          <td>
+                            {{file.archivedDate | date:"dd-MM-YYYY , hh:mm"}}
+                          </td>
+                          <td>{{file.utilisateurs.username}}</td>
+                          <td> 
+     
+                              <td *ngIf="nomRoles=='ADMIN'">
+                                
+                                 
+                                <button  data-toggle="modal" data-target="#read"  mat-stroked-button color="primary" style="margin-left: 2px; margin-right: 2px; margin-bottom: 5px;"  (click)="addAcces(file.id)"  ><i class="fa fa-download"></i>Access</button>
+                                <br> <button data-toggle="modal" data-target="#archive" mat-stroked-button color="warn"    style="margin-left: 2px; margin-right: 2px;margin-bottom: 5px;"  (click)="addAcces(file.id)" ><i class="fa fa-lock"></i>Access</button>
+                                <br> <button data-toggle="modal" data-target="#delete" mat-stroked-button color="accent"   style="margin-left: 2px; margin-right: 2px;margin-bottom: 5px;"  (click)="addAcces(file.id)" ><i class="fa fa-trash"></i>Access</button>
+                                <br><button data-toggle="modal" data-target="#update" mat-stroked-button   color="basic" style="margin-left: 2px; margin-right: 2px;margin-bottom: 5px;"  (click)="addAcces(file.id)" ><i class="fa fa-refresh"></i>Access</button>
+
+                           
+                                
+                                
+                              
+                         
+   
+                               
+                               </td>
+    
+                          
+                            
+                          
+                      
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-xl-9 col-lg-6 col-md-6 col-sm-12" *ngIf="!id ">
+                  <div class="table text-nowrap">
+                    <table class="table-responsive">
+                      <thead>
+                        <tr>
+                          <th>FILE NAME(SIZE)</th>
+                          <th>ACTION </th>
+                          <th>UPLOADED DATE</th>
+                          <th>RESTORED DATE DATE</th>
+
+                          <th>UPLOADED BY</th>
+                          <th *ngIf="nomRoles=='ADMIN'">Access</th>
+                         </tr>
+                      </thead>
+                      <tbody class="table-border-bottom-0">
+                        <tr *ngFor="let file of listFichier ">
+                          <td><a href="#">{{file.name}}</a>({{bytesToMO(file.sizeFile)}} Mo)<br>
+                          <td>
+                            <ul class="_action_grouping_list" *ngFor="let p of listAuto">
+                              
+                             
+                              <a *ngIf="p.fichier.id == file.id && utilisateur.id==p.utilisateurs.id && p.permission === 'READ'" (click)="downloadFile(file.id,file.name,file.contentType)" data-toggle="tooltip" data-placement="top"
+                              mat-stroked-button  class="_edit_list_point" (click)="downloadFile(file.id , file.name,file.contentType)"><i class="fa fa-download"></i> Download</a>
+                              <a *ngIf="p.fichier.id == file.id && utilisateur.id==p.utilisateurs.id && p.permission === 'ARCHIVE'" (click)="archiver(file.id)" data-toggle="tooltip" data-placement="top"
+                              mat-stroked-button   class="_lock_point"><i class="fa fa-lock"></i> Archive</a>
+                              <a *ngIf="p.fichier.id == file.id && utilisateur.id==p.utilisateurs.id && p.permission === 'DELETE'" (click)="archiver(file.id)" data-toggle="tooltip" data-placement="top"
+                              mat-stroked-button class="_delete_point"><i class="fa fa-trash"></i> Delete</a>
+                                <a *ngIf="p.fichier.id == file.id && utilisateur.id==p.utilisateurs.id && p.permission === 'WRITE'" (click)="archiver(file.id)" data-toggle="tooltip" data-placement="top"
+                                 class="_delete_point"><i class="fa fa-refresh"></i> Edit</a>
+                            
+                            </ul>
+                          </td> 
+                          
+                          <td>
+                            {{file.dateUploaded | date:"dd-MM-YYYY , hh:mm"}}
+                          </td>
+                          <td>
+                            {{file.archivedDate | date:"dd-MM-YYYY , hh:mm"}}
+                          </td>
+                          <td>{{file.utilisateurs.username}}</td>
+                          <td> 
+     
+                              <td *ngIf="nomRoles=='ADMIN'">
+                                
+                                  <button  data-toggle="modal" data-target="#read"  mat-stroked-button color="primary" style="margin-left: 2px; margin-right: 2px; margin-bottom: 5px;"  (click)="addAcces(file.id)"  ><i class="fa fa-download"></i>Access</button>
+                                 <br> <button data-toggle="modal" data-target="#archive" mat-stroked-button color="warn"    style="margin-left: 2px; margin-right: 2px;margin-bottom: 5px;"  (click)="addAcces(file.id)" ><i class="fa fa-lock"></i>Access</button>
+                                 <br> <button data-toggle="modal" data-target="#delete" mat-stroked-button color="accent"   style="margin-left: 2px; margin-right: 2px;margin-bottom: 5px;"  (click)="addAcces(file.id)" ><i class="fa fa-trash"></i>Access</button>
+                                 <br><button data-toggle="modal" data-target="#update" mat-stroked-button   color="basic" style="margin-left: 2px; margin-right: 2px;margin-bottom: 5px;"  (click)="addAcces(file.id)" ><i class="fa fa-refresh"></i>Access</button>
+
+                                
+                                
+                              
+                         
+   
+                               
+                               </td>
+    
+                          
+                            
+                          
+                      
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+              
+             
+          </div>
+              </div>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+
+</section>
+<div class="modal fade"  id="files"  tabindex="-1" role="dialog" aria-labelledby="registermodal" data-backdrop="static"  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+    <form #form="ngForm" (ngSubmit)="uploadFile(form)">
+
+    <div class="modal-content" id="registermodal">
+      <div class="modal-header">
+        <h4>Add Files</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="ti-close"></i></span></button>
+      </div>
+      <div class="modal-body">
+        <p style="color: green;">{{message}}</p>
+         <div class="login-form">
+        
+
+            <div class="form-group">
+              <label>File</label>
+              <input type="file" class="form-control"   name="selectedFile" (change)="onFileSelected($event)"
+                required>
+              <div
+                *ngIf="form.controls['selectedFile']?.invalid && (form.controls['selectedFile']?.dirty || form.controls['selectedFile']?.touched)"
+                class="text-danger">
+                File is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <label> Uploded By</label>
+              <input type="text" [(ngModel)]="utilisateur.id" name="utilisateurs" value="{{utilisateur.id}}"
+                class="form-control" placeholder="*******" required>
+              <!-- Display validation error message -->
+              <div
+                *ngIf="form.controls['utilisateurs']?.invalid && (form.controls['utilisateurs']?.dirty || form.controls['utilisateurs']?.touched)"
+                class="text-danger">
+                Sous Folders is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <label> Folders</label>
+              <input type="text" [(ngModel)]="cat.id" name="sousCategorie" value="{{cat.id}}"
+                class="form-control" placeholder="*******" required>
+              <!-- Display validation error message -->
+              <div
+                *ngIf="form.controls['sousCategorie']?.invalid && (form.controls['sousCategorie']?.dirty || form.controls['sousCategorie']?.touched)"
+                class="text-danger">
+                Sous Folders is required.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button type="button" class="close btn dark-2 btn-md full-width pop-login" 
+               data-dismiss="modal" >
+               Close</button>
+
+              <button type="submit" class="btn dark-2 btn-md full-width pop-login">Save</button>
+            </div>
+
+         </div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+    </form>
+  </div>
+  </div>
+  <div class="modal fade" id="read" tabindex="-1" role="dialog" aria-labelledby="registermodal" data-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+        <form #form="ngForm" (ngSubmit)="downloadPermission(fichier.id, auto.utilisateurs.id)">
+            <div class="modal-content" id="registermodal">
+                <div class="modal-header">
+                    <h4>DOWNLOAD PERMISSION</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="ti-close"></i></span></button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: green;">{{message}}</p>
+                    <div class="login-form">
+                        <input type="hidden" class="form-control" [(ngModel)]="auto.permission" name="permission" value="READ" required>
+                        <div *ngIf="form.controls['permission']?.invalid && (form.controls['permission']?.dirty || form.controls['permission']?.touched)" class="text-danger">
+                            File is required.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>File</label>
+                        <input type="text" class="form-control" [(ngModel)]="fichier.id" name="fichier" value="{{fichier.id}}" required>
+                        <div *ngIf="form.controls['fichier']?.invalid && (form.controls['fichier']?.dirty || form.controls['fichier']?.touched)" class="text-danger">
+                            File is required.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label> Acces For</label>
+                        <select class="form-control" [(ngModel)]="auto.utilisateurs.id" name="utilisateurs">
+                            <option *ngFor="let utilisateur of listUtilisateur" [value]="utilisateur.id">{{utilisateur.username}}</option>
+                        </select>
+                        <div *ngIf="form.controls['utilisateurs']?.invalid && (form.controls['utilisateurs']?.dirty || form.controls['utilisateurs']?.touched)" class="text-danger">
+                            Sous Folders is required.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="close btn dark-2 btn-md full-width pop-login" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn dark-2 btn-md full-width pop-login">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="registermodal" data-backdrop="static" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+      <form #form="ngForm" (ngSubmit)="deletePermission(fichier.id, auto.utilisateurs.id)">
+          <div class="modal-content" id="registermodal">
+              <div class="modal-header">
+                  <h4>DELETE PERMESSTION </h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="ti-close"></i></span></button>
+              </div>
+              <div class="modal-body">
+                  <p style="color: green;">{{message}}</p>
+                  <div class="login-form">
+                      <input type="hidden" class="form-control" [(ngModel)]="auto.permission" name="permission" value="READ" required>
+                      <div *ngIf="form.controls['permission']?.invalid && (form.controls['permission']?.dirty || form.controls['permission']?.touched)" class="text-danger">
+                          File is required.
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label>File</label>
+                      <input type="text" class="form-control" [(ngModel)]="fichier.id" name="fichier" value="{{fichier.id}}" required>
+                      <div *ngIf="form.controls['fichier']?.invalid && (form.controls['fichier']?.dirty || form.controls['fichier']?.touched)" class="text-danger">
+                          File is required.
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label> Acces For</label>
+                      <select class="form-control" [(ngModel)]="auto.utilisateurs.id" name="utilisateurs">
+                          <option *ngFor="let utilisateur of listUtilisateur" [value]="utilisateur.id">{{utilisateur.username}}</option>
+                      </select>
+                      <div *ngIf="form.controls['utilisateurs']?.invalid && (form.controls['utilisateurs']?.dirty || form.controls['utilisateurs']?.touched)" class="text-danger">
+                          Sous Folders is required.
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <button type="button" class="close btn dark-2 btn-md full-width pop-login" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn dark-2 btn-md full-width pop-login">Save</button>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>
+<div class="modal fade" id="archive" tabindex="-1" role="dialog" aria-labelledby="registermodal" data-backdrop="static" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+      <form #form="ngForm" (ngSubmit)="archivePermission(fichier.id, auto.utilisateurs.id)">
+          <div class="modal-content" id="registermodal">
+              <div class="modal-header">
+                  <h4>ARCHIVE PERMESSTION</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="ti-close"></i></span></button>
+              </div>
+              <div class="modal-body">
+                  <p style="color: green;">{{message}}</p>
+                  <div class="login-form">
+                      <input type="hidden" class="form-control" [(ngModel)]="auto.permission" name="permission" value="READ" required>
+                      <div *ngIf="form.controls['permission']?.invalid && (form.controls['permission']?.dirty || form.controls['permission']?.touched)" class="text-danger">
+                          File is required.
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label>File</label>
+                      <input type="text" class="form-control" [(ngModel)]="fichier.id" name="fichier" value="{{fichier.id}}" required>
+                      <div *ngIf="form.controls['fichier']?.invalid && (form.controls['fichier']?.dirty || form.controls['fichier']?.touched)" class="text-danger">
+                          File is required.
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label> Acces For</label>
+                      <select class="form-control" [(ngModel)]="auto.utilisateurs.id" name="utilisateurs">
+                          <option *ngFor="let utilisateur of listUtilisateur" [value]="utilisateur.id">{{utilisateur.username}}</option>
+                      </select>
+                      <div *ngIf="form.controls['utilisateurs']?.invalid && (form.controls['utilisateurs']?.dirty || form.controls['utilisateurs']?.touched)" class="text-danger">
+                          Sous Folders is required.
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <button type="button" class="close btn dark-2 btn-md full-width pop-login" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn dark-2 btn-md full-width pop-login">Save</button>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>
+<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="registermodal" data-backdrop="static" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+      <form #form="ngForm" (ngSubmit)="updatePermission(fichier.id, auto.utilisateurs.id)">
+          <div class="modal-content" id="registermodal">
+              <div class="modal-header">
+                  <h4>UPDATE PERMESSTION</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="ti-close"></i></span></button>
+              </div>
+              <div class="modal-body">
+                  <p style="color: green;">{{message}}</p>
+                  <div class="login-form">
+                      <input type="hidden" class="form-control" [(ngModel)]="auto.permission" name="permission" value="READ" required>
+                      <div *ngIf="form.controls['permission']?.invalid && (form.controls['permission']?.dirty || form.controls['permission']?.touched)" class="text-danger">
+                          File is required.
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label>File</label>
+                      <input type="text" class="form-control" [(ngModel)]="fichier.id" name="fichier" value="{{fichier.id}}" required>
+                      <div *ngIf="form.controls['fichier']?.invalid && (form.controls['fichier']?.dirty || form.controls['fichier']?.touched)" class="text-danger">
+                          File is required.
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label> Acces For</label>
+                      <select class="form-control" [(ngModel)]="auto.utilisateurs.id" name="utilisateurs">
+                          <option *ngFor="let utilisateur of listUtilisateur" [value]="utilisateur.id">{{utilisateur.username}}</option>
+                      </select>
+                      <div *ngIf="form.controls['utilisateurs']?.invalid && (form.controls['utilisateurs']?.dirty || form.controls['utilisateurs']?.touched)" class="text-danger">
+                          Sous Folders is required.
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <button type="button" class="close btn dark-2 btn-md full-width pop-login" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn dark-2 btn-md full-width pop-login">Save</button>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>

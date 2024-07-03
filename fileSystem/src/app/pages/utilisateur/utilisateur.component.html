@@ -1,0 +1,342 @@
+<section class="pt-4 mt-5">
+    <div class="container-fluid">
+        <div class="row m-0">
+
+            <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12"                *ngIf="loginOrNot()">
+                <div class="dashboard-navbar overlio-top">
+        
+        
+                  <div class="d-navigation">
+                    <ul id="metismenu">
+                      <li class="active"><a routerLink="/home"><i class="ti-dashboard"></i>Dashboard</a></li>
+                      <li><a routerLink="/files"><i class="ti-folder"></i>Files</a></li>
+                      <li><a routerLink="/filesArchiver"><i class="fa fa-archive" aria-hidden="true"></i>
+                        Files Archive</a></li>
+                       <li ><a routerLink="/employeur"><i class="fa fa-user" aria-hidden="true"></i>
+                        Employeur</a></li>
+                       <li  ><a routerLink="/autorisation"><i class="fa fa-check-square-o" aria-hidden="true"></i>
+                        Autorisation</a></li>
+        
+                        <li><a routerLink="/chat"><i class="ti-email"></i>Messages</a></li>
+        
+                      <li><a (click)="logout()"><i class="ti-power-off"></i>Log Out</a></li>
+                    </ul>
+                  </div>
+        
+                </div>
+              </div>
+        
+              <div class="col-xl-10 col-lg-6 col-md-6 col-sm-12">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                      <!-- Breadcrumbs -->
+                      <div class="bredcrumb_wrap">
+                        <nav aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                          <li class="breadcrumb-item"><a href="#">Home</a></li>
+                          <li class="breadcrumb-item active" aria-current="page">Employeur </li>
+                          </ol>
+                        </nav>	
+                      </div>
+                    </div>
+                  </div>
+                <div class="_dashboard_content_header">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="form-group">
+                            <div class="label_flex">
+                                <label class="fl_01">List Employeur </label>
+                                <div class="custom-file mb-3">
+                                    <button [disabled]="nomRoles!=='ADMIN'"  class="btn dark-3 full-width r-radius" data-toggle="modal"
+                                      mat-stroked-button color="primary"   data-target="#exampleModal"><i class="fa fa-plus"></i> Employeur </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid py-4">
+
+                    <div class="row">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <table class="table align-items-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Nom et prenom</th>
+                                            <th>
+                                                Adresse</th>
+                                            <th>
+                                                CIN</th>
+                                            <th>
+                                                USERNAME</th>
+                                            <th>
+                                                ROLES</th>
+                                            <th>ACTION</th>
+                                            <th class="text-secondary opacity-7"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngFor="let user of listUtilisateur">
+                                        <tr>
+                                            <td>
+                                                {{user.nom + " "+ user.prenom}}
+                                            </td>
+                                            <td>
+                                                {{user.adresse}}
+                                            </td>
+                                            <td>
+                                                {{user.cin}}
+                                            </td>
+                                            <td>
+                                                {{user.username}}
+                                            </td>
+                                            <td>
+                                                {{user.roles[0].nomRoles}}
+                                            </td>
+                                            <td >
+
+                                                <button [disabled]="nomRoles!=='ADMIN' || user.etat== false" mat-stroked-button
+                                                    style="margin-right: 5px; margin-left: 5px;" data-toggle="modal"
+                                                    data-target="#exemple2" (click)="update(user.id)"><mat-icon
+                                                        fontIcon="update" color="primary"></mat-icon>
+                                                </button>
+                                                <button [disabled]="nomRoles!=='ADMIN' " mat-stroked-button
+                                                (click)="changeEtat(user.id)" style="margin-right: 5px; margin-left: 5px;" 
+                                                 (click)="update(user.id)"><mat-icon
+                                                    fontIcon="lock" color="accent"></mat-icon>
+                                            </button>
+                                            </td>
+
+
+
+
+
+
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+</section>
+<div class="modal fade" id="exampleModal" tabindex="-1" data-backdrop="static" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Employuer</h1>
+                <button type="button" class="btn btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body demo-vertical-spacing demo-only-element">
+                    <form #form="ngForm" (ngSubmit)="addNewUtilisateur(form)">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Photo</label>
+                                    <input type="file" name="image" class="form-control" (change)="fileSelected($event)">
+                                    
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.nom" name="nom"
+                                        placeholder="Username" required minlength="3">
+                                    <div class="error"
+                                        *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)">
+                                        First Name is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.prenom" name="prenom"
+                                        placeholder="Username" required minlength="3">
+                                    <div class="error"
+                                        *ngIf="form.controls['prenom']?.invalid && (form.controls['prenom']?.dirty || form.controls['prenom']?.touched)">
+                                        <div *ngIf="form.controls['prenom']?.errors">Last Name is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Adress</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.adresse" name="adresse"
+                                        placeholder="Username" required minlength="5">
+                                    <div class="error"
+                                        *ngIf="form.controls['adresse']?.invalid && (form.controls['adresse']?.dirty || form.controls['adresse']?.touched)">
+                                        <div *ngIf="form.controls['adresse']?.errors">Address is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>CIN</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.cin" name="cin"
+                                        placeholder="Username" required pattern="[0-9]{8}">
+                                    <div class="error"
+                                        *ngIf="form.controls['cin']?.invalid && (form.controls['cin']?.dirty || form.controls['cin']?.touched)">
+                                        <div *ngIf="form.controls['cin']?.errors">CIN is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>User Name</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.username"
+                                        name="username" placeholder="Username" required minlength="5">
+                                    <div class="error"
+                                        *ngIf="form.controls['username']?.invalid && (form.controls['username']?.dirty || form.controls['username']?.touched)">
+                                        <div *ngIf="form.controls['username']?.errors">Username is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+    
+                                    <label>Password</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.password"
+                                        name="password" placeholder="Username" required minlength="5">
+                                    <div class="error"
+                                        *ngIf="form.controls['password']?.invalid && (form.controls['password']?.dirty || form.controls['password']?.touched)">
+                                        <div *ngIf="form.controls['password']?.errors">Username is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+    
+    
+    
+    
+                            <div class="form-group">
+                                <button type="submit" class="btn dark-2 btn-md full-width pop-login">Register</button>
+                            </div>
+                        </div>
+                    </form>
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+<div class="modal fade" id="exemple2" tabindex="-1" data-backdrop="static" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Employuer</h1>
+                <button type="button" class="btn btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body demo-vertical-spacing demo-only-element">
+                    <form #form="ngForm" (ngSubmit)="updateEmployeur(form)">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Photo</label>
+                                    <input type="file" name="image" class="form-control" (change)="fileSelected($event)">
+                                    
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.nom" name="nom"
+                                        placeholder="Username" required minlength="3">
+                                    <div class="error"
+                                        *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)">
+                                        First Name is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.prenom" name="prenom"
+                                        placeholder="Username" required minlength="3">
+                                    <div class="error"
+                                        *ngIf="form.controls['prenom']?.invalid && (form.controls['prenom']?.dirty || form.controls['prenom']?.touched)">
+                                        <div *ngIf="form.controls['prenom']?.errors">Last Name is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Adress</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.adresse" name="adresse"
+                                        placeholder="Username" required minlength="5">
+                                    <div class="error"
+                                        *ngIf="form.controls['adresse']?.invalid && (form.controls['adresse']?.dirty || form.controls['adresse']?.touched)">
+                                        <div *ngIf="form.controls['adresse']?.errors">Address is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>CIN</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.cin" name="cin"
+                                        placeholder="Username" required pattern="[0-9]{8}">
+                                    <div class="error"
+                                        *ngIf="form.controls['cin']?.invalid && (form.controls['cin']?.dirty || form.controls['cin']?.touched)">
+                                        <div *ngIf="form.controls['cin']?.errors">CIN is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>User Name</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.username"
+                                        name="username" placeholder="Username" required minlength="5">
+                                    <div class="error"
+                                        *ngIf="form.controls['username']?.invalid && (form.controls['username']?.dirty || form.controls['username']?.touched)">
+                                        <div *ngIf="form.controls['username']?.errors">Username is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+    
+                                    <label>Password</label>
+                                    <input type="text" class="form-control" [(ngModel)]="employeur.password"
+                                        name="password" placeholder="Username" required minlength="5">
+                                    <div class="error"
+                                        *ngIf="form.controls['password']?.invalid && (form.controls['password']?.dirty || form.controls['password']?.touched)">
+                                        <div *ngIf="form.controls['password']?.errors">Username is required.</div>
+                                    </div>
+                                </div>
+                            </div>
+    
+    
+    
+    
+                            <div class="form-group">
+                                <button type="submit" class="btn dark-2 btn-md full-width pop-login">Register</button>
+                            </div>
+                        </div>
+                    </form>
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>

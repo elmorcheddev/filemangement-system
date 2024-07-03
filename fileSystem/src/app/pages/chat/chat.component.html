@@ -1,0 +1,130 @@
+<section class="pt-4 mt-5">
+    <div class="container-fluid">
+        <div class="row m-0">
+
+          <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12" > 
+                <div class="dashboard-navbar overlio-top">
+
+
+                    <div class="d-navigation">
+                        <ul id="metismenu">
+                            <li class="active"><a routerLink="/home"><i class="ti-dashboard"></i>Dashboard</a></li>
+                            <li><a routerLink="/files"><i class="ti-folder"></i>Files</a></li>
+                            <li><a routerLink="/filesArchiver"><i class="fa fa-archive" aria-hidden="true"></i>
+                                    Files Archive</a></li>
+                            <li  ><a routerLink="/employeur"><i class="fa fa-user"
+                                        aria-hidden="true"></i>
+                                    Employeur</a></li>
+                            <li ><a routerLink="/autorisation"><i
+                                        class="fa fa-check-square-o" aria-hidden="true"></i>
+                                    Autorisation</a></li>
+
+                            <li><a routerLink="/chat"><i class="ti-email"></i>Messages</a></li>
+
+                            <li><a (click)="logout()"><i class="ti-power-off"></i>Log Out</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-xl-10 col-lg-6 col-md-6 col-sm-12" > 
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                      <!-- Breadcrumbs -->
+                      <div class="bredcrumb_wrap">
+                        <nav aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                          <li class="breadcrumb-item"><a href="#">Home</a></li>
+                          <li class="breadcrumb-item active" aria-current="page">Messages</li>
+                          </ol>
+                        </nav>	
+                      </div>
+                    </div>
+                  </div>
+                <!-- Convershion -->
+                <div class="messages-container margin-top-0">
+                    <div class="messages-headline">
+                        <h4>{{utilisateur.username}}</h4>
+                    </div>
+
+                    <div class="messages-container-inner">
+
+                        <!-- Messages -->
+                        <div class="dash-msg-inbox">
+                            <ul>
+                                <li *ngFor="let pers of listUtilisateur">
+                                    <a (click)="getMessage(pers.id)">
+                                        <div class="dash-msg-avatar">
+                                            <img [src]="'data:image/jpeg;base64,' + utilisateur.photo" alt="{{utilisateur.photo}}"
+                                            class="img-fluid rounded shadow" width="20" height="20"><span class="_user_status online"></span>
+                                        </div>
+
+                                        <div class="message-by">
+                                            <div class="message-by-headline">
+                                                <h5>{{pers.username}} </h5>
+                                                <span></span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Messages / End -->
+
+                        <!-- Message Content -->
+                        <div class="dash-msg-content" *ngIf="id">
+
+                            <div class="message-plunch" *ngFor="let msg of msglistAdmin">
+                                <div class="dash-msg-avatar">  </div>
+                                <div class="dash-msg-text">
+                                    <p>
+                                        {{msg.content}} </p>
+                                    <span>{{msg.timestamp | date:"yyyy:dd:MM , hh:mm:ss"}}</span>
+                                </div>
+                            </div>
+
+                            <div class="message-plunch me" *ngFor="let msg of msglistUser">
+                                <div class="dash-msg-avatar">  </div>
+                                <div class="dash-msg-text">
+                                    <p>
+                                        {{msg.content}}
+                                    </p>
+                                <span>{{msg.timestamp | date:"yyyy:dd:MM , hh:mm"}}</span>
+
+                                </div>
+                            </div>
+
+
+
+                            <!-- Reply Area -->
+                            <div class="clearfix"></div>
+                            <div class="message-reply">
+                                <form #form="ngForm" (ngSubmit)="sendMessage(form)">
+                                    <input type="hidden" [(ngModel)]="message.sender.id" name="sender" [value]=sender.id
+                                        class="form-control">
+                                    <input type="hidden" [(ngModel)]="message.recipient.id" name="recipient"
+                                        [value]="recepient.id" class="form-control">
+                                    <textarea [(ngModel)]="message.content" name="content" cols="40" rows="3"
+                                        class="form-control with-light" placeholder="Your Message"></textarea>
+                                    <button type="submit" class="btn dark-2">Send Message</button>
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- Message Content -->
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+</section>
